@@ -11,10 +11,9 @@ RUN apk add --no-cache \
     # Prepare the /var/www directory for SeAT
     mkdir -p /var/www && cd /var/www && \
     # And install SeAT
-    composer create-project eveseat/seat --stability beta --no-dev --no-ansi --no-progress
-
-# Publish migrations, assets and generate API documenation
-RUN cd /var/www/seat && \
+    composer create-project eveseat/seat --stability beta --no-dev --no-ansi --no-progress && \
+    # Publish migrations, assets and generate API documenation
+    cd /var/www/seat && \
     php artisan vendor:publish --force --all && \
     php artisan l5-swagger:generate
 
