@@ -3,9 +3,6 @@ set -e
 
 cd /var/www/seat
 
-# Ensure the logs directory is writable
-chown -R www-data:www-data storage
-
 # Wait for the database
 while ! mysqladmin ping -hmariadb --silent; do
 
@@ -13,10 +10,22 @@ while ! mysqladmin ping -hmariadb --silent; do
     sleep 10
 done
 
-# Run any migrations
-php artisan migrate
+# Check if we have to start first-run routines...
+if [ ! -f /root/.seat-installed ]; then
 
-# Download the SDE
-#php artisan eve:update-sde -n
+    echo "Starting first-run routines..."
+
+    # Run any migrations
+    php artisan migrate
+
+    # Update the SDE
+    php artisan eve:update-sde -n
+
+    # Run the schedule seeder
+    php artisan db:seed --class=Seat\\Services\\database\\seeds\\ScheduleSeeder
+
+    # Mark this environment as installed
+    touch /root/.seat-installed
+fi
 
 php-fpm -F
