@@ -10,14 +10,11 @@ chown -R www-data:www-data storage
 while ! mysqladmin ping -hmariadb --silent; do
 
     echo "MariaDB container might not be ready yet... sleeping..."
-    sleep 3
+    sleep 10
 done
 
 # Run any migrations
 php artisan migrate
-
-# Regenerate API documentation
-php artisan l5-swagger:generate
 
 # Download the SDE
 #php artisan eve:update-sde -n
