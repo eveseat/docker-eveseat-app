@@ -3,6 +3,8 @@ set -e
 
 cd /var/www/seat
 
+chown -R www-data:www-data storage
+
 # Wait for the database
 while ! mysqladmin ping -hmariadb --silent; do
 
