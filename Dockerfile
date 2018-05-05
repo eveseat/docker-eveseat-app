@@ -20,6 +20,8 @@ RUN apk add --no-cache \
 COPY startup.sh /root/startup.sh
 RUN chmod +x /root/startup.sh
 
+WORKDIR /var/www/seat
+
 CMD ["php-fpm", "-F"]
 
 ENTRYPOINT ["/bin/sh", "/root/startup.sh"]
