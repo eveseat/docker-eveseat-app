@@ -22,6 +22,9 @@ RUN chmod +x /root/startup.sh
 
 WORKDIR /var/www/seat
 
+# Allow for logs to be exposed to the host operating system.
+VOLUME /var/www/seat/storage/logs
+
 CMD ["php-fpm", "-F"]
 
 ENTRYPOINT ["/bin/sh", "/root/startup.sh"]
