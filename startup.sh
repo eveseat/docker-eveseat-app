@@ -21,7 +21,7 @@ if [ ! -f /root/.seat-installed ]; then
     php artisan migrate
 
     # Update the SDE
-    php artisan eve:update-sde -n
+    php artisan eve:update:sde -n
 
     # Run the schedule seeder
     php artisan db:seed --class=Seat\\Services\\database\\seeds\\ScheduleSeeder
