@@ -3,7 +3,7 @@ set -e
 
 # Ensure the latest sources from this container lives in the volume.
 # Working dir is /var/www/seat from the container.
-rm -Rf * && \
+find . -maxdepth 1 ! -name . -exec rm -r {} \; && \
    tar cf - --one-file-system -C /usr/src/seat . | tar xf -
 
 # Fix up permissions
