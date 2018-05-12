@@ -17,6 +17,12 @@ if [ ! -f /root/.seat-installed ]; then
 
     echo "Starting first-run routines..."
 
+    # Create an .env if needed
+    php -r "file_exists('.env') || copy('.env.example', '.env');"
+
+    # Generate the applications key
+    php artisan key:generate
+
     # Run any migrations
     php artisan migrate
 
@@ -28,6 +34,8 @@ if [ ! -f /root/.seat-installed ]; then
 
     # Mark this environment as installed
     touch /root/.seat-installed
+
+    echo "Completed first run routines..."
 fi
 
 php-fpm -F
