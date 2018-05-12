@@ -1,8 +1,12 @@
 #!/bin/sh
 set -e
 
-cd /var/www/seat
+# Ensure the latest sources from this container lives in the volume.
+# Working dir is /var/www/seat from the container.
+rm -Rf * && \
+   tar cf - --one-file-system -C /usr/src/seat . | tar xf -
 
+# Fix up permissions
 chown -R www-data:www-data storage
 
 # Wait for the database
