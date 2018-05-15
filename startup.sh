@@ -42,4 +42,15 @@ if [ ! -f /root/.seat-installed ]; then
     echo "Completed first run routines..."
 fi
 
+echo "Installing And Updating Plugins..."
+plugins=`echo -n ${SEAT_PLUGINS} | sed 's/,/ /g'`
+for plugin in ${plugins}
+do
+    composer require ${plugin}
+done
+php artisan vendor:publish --force --all
+php artisan migrate
+
+echo "Completed plugins..."
+
 php-fpm -F
