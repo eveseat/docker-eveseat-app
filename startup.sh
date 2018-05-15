@@ -42,15 +42,25 @@ if [ ! -f /root/.seat-installed ]; then
     echo "Completed first run routines..."
 fi
 
-echo "Installing And Updating Plugins..."
+# Plugin support. The docker-compose.yml has the option
+# for setting SEAT_PLUGINS environment variable. Read
+# that here and split by commas.
+echo "Installing and updating plugins..."
 plugins=`echo -n ${SEAT_PLUGINS} | sed 's/,/ /g'`
-for plugin in ${plugins}
-do
-    composer require ${plugin}
-done
-php artisan vendor:publish --force --all
-php artisan migrate
 
-echo "Completed plugins..."
+# If we have any plugins to process, do that.
+if [ ! "$plugins" == "" ]; then
+    echo "Installing plugins: ${SEAT_PLUGINS}"
+
+    # Require the plugins from the environment variable.
+    # Composer accepts multiple repositories.
+    composer require ${plugins}
+
+    # Publish assets and migrations and run them.
+    php artisan vendor:publish --force --all
+    php artisan migrate
+fi
+
+echo "Completed plugins processing"
 
 php-fpm -F
