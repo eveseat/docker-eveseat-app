@@ -24,9 +24,6 @@ if [ ! -f /root/.seat-installed ]; then
     # Create an .env if needed
     php -r "file_exists('.env') || copy('.env.example', '.env');"
 
-    # Generate the applications key
-    php artisan key:generate
-
     # Run any migrations
     php artisan migrate
 
