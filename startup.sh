@@ -58,7 +58,6 @@ fi
 echo "Completed plugins processing"
 
 # Fix up permissions
-chown -R www-data:www-data storage
 chown -R www-data:www-data .
 find . -type d -print0 | xargs -0 chmod 775
 find . -type f -print0 | xargs -0 chmod 664
