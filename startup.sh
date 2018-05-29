@@ -44,11 +44,17 @@ plugins=`echo -n ${SEAT_PLUGINS} | sed 's/,/ /g'`
 
 # If we have any plugins to process, do that.
 if [ ! "$plugins" == "" ]; then
+
     echo "Installing plugins: ${SEAT_PLUGINS}"
 
+    # Why are we doing it like this?
+    #   ref: https://github.com/composer/composer/issues/1874
+
     # Require the plugins from the environment variable.
-    # Composer accepts multiple repositories.
-    composer require ${plugins}
+    composer require ${plugins} --no-update
+
+    # Update the plugins.
+    composer update ${plugins} --no-scripts --no-dev --no-ansi --no-progress
 
     # Publish assets and migrations and run them.
     php artisan vendor:publish --force --all
