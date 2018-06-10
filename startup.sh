@@ -13,28 +13,22 @@ while ! mysqladmin ping -hmariadb --silent; do
     sleep 10
 done
 
-# Check if we have to start first-run routines...
-if [ ! -f /root/.seat-installed ]; then
+# Startup routines
+echo "Starting first-run routines..."
 
-    echo "Starting first-run routines..."
+# Create an .env if needed
+php -r "file_exists('.env') || copy('.env.example', '.env');"
 
-    # Create an .env if needed
-    php -r "file_exists('.env') || copy('.env.example', '.env');"
+# Run any migrations
+php artisan migrate
 
-    # Run any migrations
-    php artisan migrate
+# Update the SDE
+php artisan eve:update:sde -n
 
-    # Update the SDE
-    php artisan eve:update:sde -n
+# Run the schedule seeder
+php artisan db:seed --class=Seat\\Services\\database\\seeds\\ScheduleSeeder
 
-    # Run the schedule seeder
-    php artisan db:seed --class=Seat\\Services\\database\\seeds\\ScheduleSeeder
-
-    # Mark this environment as installed
-    touch /root/.seat-installed
-
-    echo "Completed first run routines..."
-fi
+echo "Completed first run routines..."
 
 # Plugin support. The docker-compose.yml has the option
 # for setting SEAT_PLUGINS environment variable. Read
