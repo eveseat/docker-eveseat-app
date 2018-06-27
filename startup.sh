@@ -7,7 +7,7 @@ find . -maxdepth 1 ! -name . -exec rm -r {} \; && \
    tar cf - --one-file-system -C /usr/src/seat . | tar xf -
 
 # Wait for the database
-while ! mysqladmin ping -hmariadb --silent; do
+while ! mysqladmin ping -h${DB_HOST} --silent; do
 
     echo "MariaDB container might not be ready yet... sleeping..."
     sleep 10
